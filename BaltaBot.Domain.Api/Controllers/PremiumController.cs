@@ -2,14 +2,20 @@
 using BaltaBot.Domain.Handlers;
 using Discord;
 using Discord.Commands;
-using Microsoft.AspNetCore.Mvc;
 
 namespace BaltaBot.Domain.Api.Controllers
 {
     public class PremiumController : ModuleBase<SocketCommandContext>
     {
+        private readonly PremiumHandler _handler;
+
+        public PremiumController(PremiumHandler handler) 
+        {
+            _handler = handler;
+        }
+
         [Command("premium")]
-        public async Task SetPremium([FromServices] PremiumHandler handler, string id)
+        public async Task SetPremium(string id)
         {
             if (Context.Message.Channel.Name != "quero-ser-premium")
                 return;
@@ -17,7 +23,7 @@ namespace BaltaBot.Domain.Api.Controllers
             await Context.Channel.DeleteMessageAsync(Context.Message.Id);
             var command = new CreatePremiumCommand(id, Context.User.Id.ToString());
 
-            var result = (GenericCommandResult)await handler.Handle(command);
+            var result = (GenericCommandResult)await _handler.Handle(command);
 
             if (result.Success)
             {

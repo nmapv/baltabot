@@ -2,14 +2,20 @@
 using BaltaBot.Domain.Handlers;
 using Discord;
 using Discord.Commands;
-using Microsoft.AspNetCore.Mvc;
 
 namespace BaltaBot.Domain.Api.Controllers
 {
     public class PersonController : ModuleBase<SocketCommandContext>
     {
+        private readonly PersonHandler _handler;
+
+        public PersonController(PersonHandler handler)
+        {
+            _handler = handler;
+        }
+
         [Command("verify")]
-        public async Task CreatePerson([FromServices] PersonHandler handler)
+        public async Task CreatePerson()
         {
             if (Context.Message.Channel.Name != "quero-ser-premium")
                 return;
@@ -17,7 +23,7 @@ namespace BaltaBot.Domain.Api.Controllers
             await Context.Channel.DeleteMessageAsync(Context.Message.Id);
             var command = new CreatePersonCommand(Context.User.Id.ToString(), Context.User.Username);
 
-            var result = (GenericCommandResult)await handler.Handle(command);
+            var result = (GenericCommandResult)await _handler.Handle(command);
             
             if (result.Success)
             {
