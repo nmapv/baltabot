@@ -28,7 +28,8 @@ namespace BaltaBot.Domain.Api
 
                 client.Log += LogAsync;
                 services.GetRequiredService<CommandService>().Log += LogAsync;
-                await client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("TOKEN_DISCORD"));
+                //await client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("TOKEN_DISCORD"));
+                await client.LoginAsync(TokenType.Bot, "MTA0ODIwOTg4MDg1NjY3MDIyMA.GeG0XD.KDk6Yru6m0PLQ9Hd8xqJAB5tBShHBrK_4vf2Q8");
                 await client.StartAsync();
 
                 await services.GetRequiredService<ConfigDiscord>().InitializeAsync();
@@ -43,9 +44,7 @@ namespace BaltaBot.Domain.Api
             return Task.CompletedTask;
         }
 
-        private ServiceProvider ConfigureServices()
-        {
-            return new ServiceCollection()
+        private ServiceProvider ConfigureServices() => new ServiceCollection()
                 .AddSingleton(new DiscordSocketConfig
                 {
                     GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent
@@ -56,6 +55,7 @@ namespace BaltaBot.Domain.Api
                 .AddSingleton<HttpClient>()
                 //.AddTransient<DataContext>(s => new DataContext(conn!))
                 .AddSingleton<DataContext>()
+                .AddTransient<IPremiumApiRepository, PremiumApiRepository>()
                 .AddTransient<IPersonRepository, PersonRepository>()
                 .AddTransient<IPremiumRepository, PremiumRepository>()
                 .AddTransient<PersonHandler, PersonHandler>()
@@ -67,7 +67,6 @@ namespace BaltaBot.Domain.Api
                     .ScanIn(AppDomain.CurrentDomain.GetAssemblies().Where(x => x.FullName.Contains("BaltaBot.Domain.Infra")).ToArray()).For.Migrations())
                 .AddLogging(c => c.AddFluentMigratorConsole())
                 .BuildServiceProvider();
-        }
 
         private static void UpdateDatabase(IServiceProvider serviceProvider)
         {

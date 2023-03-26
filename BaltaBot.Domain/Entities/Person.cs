@@ -1,8 +1,10 @@
 ﻿using BaltaBot.Domain.Commands;
+using Dapper.Contrib.Extensions;
 using Flunt.Validations;
 
 namespace BaltaBot.Domain.Entities
 {
+    [Table("Person")]
     public class Person : Entity
     {
         public Person(string discordId, string name, DateTime createdAt)

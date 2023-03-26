@@ -35,6 +35,10 @@ namespace BaltaBot.Domain.Handlers
                 return new GenericCommandResult(true, $"Premium {premium.Id} já cadastrado", premium);
 
             premium = await _premiumApiRepository.Create(command.GetGuid(), person);
+
+            if (premium == null)
+                return new GenericCommandResult(false, "Premium id informado não existe", null);
+
             AddNotifications(premium.Notifications);
 
             if (!IsValid)
