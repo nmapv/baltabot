@@ -28,8 +28,7 @@ namespace BaltaBot.Domain.Api
 
                 client.Log += LogAsync;
                 services.GetRequiredService<CommandService>().Log += LogAsync;
-                //await client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("TOKEN_DISCORD"));
-                await client.LoginAsync(TokenType.Bot, "MTA0ODIwOTg4MDg1NjY3MDIyMA.GeG0XD.KDk6Yru6m0PLQ9Hd8xqJAB5tBShHBrK_4vf2Q8");
+                await client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("TOKEN_DISCORD"));
                 await client.StartAsync();
 
                 await services.GetRequiredService<ConfigDiscord>().InitializeAsync();
