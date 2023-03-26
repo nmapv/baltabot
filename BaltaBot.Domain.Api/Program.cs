@@ -3,6 +3,7 @@ using BaltaBot.Domain.Infra.Context;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using FluentMigrator.Runner;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BaltaBot.Domain.Api
@@ -16,6 +17,11 @@ namespace BaltaBot.Domain.Api
         {
             using (var services = ConfigureServices())
             {
+                using (var scope = services.CreateScope())
+                {
+                    UpdateDatabase(scope.ServiceProvider);
+                }
+
                 var client = services.GetRequiredService<DiscordSocketClient>();
 
                 client.Log += LogAsync;
@@ -50,7 +56,19 @@ namespace BaltaBot.Domain.Api
                 .AddSingleton<DataContext>()
                 .AddTransient<PersonHandler, PersonHandler>()
                 .AddTransient<PremiumHandler, PremiumHandler>()
+                .AddFluentMigratorCore()
+                .ConfigureRunner(c => c
+                    .AddSQLite()
+                    .WithGlobalConnectionString("DataSource=file::memory:?cache=shared")
+                    .ScanIn(AppDomain.CurrentDomain.GetAssemblies().Where(x => x.FullName.Contains("BaltaBot.Domain.Infra")).ToArray()).For.Migrations())
+                .AddLogging(c => c.AddFluentMigratorConsole())
                 .BuildServiceProvider();
+        }
+
+        private static void UpdateDatabase(IServiceProvider serviceProvider)
+        {
+            var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
+            runner.MigrateUp();
         }
     }
 }
