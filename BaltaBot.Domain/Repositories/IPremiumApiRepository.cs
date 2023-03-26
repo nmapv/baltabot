@@ -4,6 +4,6 @@ namespace BaltaBot.Domain.Repositories
 {
     public interface IPremiumApiRepository
     {
-        Task<Premium> GetById(Guid id);
+        Task<Premium> Create(Guid id, Person person);
     }
 }

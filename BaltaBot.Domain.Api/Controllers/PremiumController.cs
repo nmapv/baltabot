@@ -15,7 +15,7 @@ namespace BaltaBot.Domain.Api.Controllers
                 return;
 
             await Context.Channel.DeleteMessageAsync(Context.Message.Id);
-            var command = new CreatePremiumCommand(id);
+            var command = new CreatePremiumCommand(id, Context.User.Id.ToString());
 
             var result = (GenericCommandResult)await handler.Handle(command);
 

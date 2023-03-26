@@ -18,11 +18,15 @@ namespace BaltaBot.Domain.Infra.Migrations
                 .WithColumn("Name").AsString().NotNullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable();
 
+            Create.Index()
+                .OnTable("Person")
+                .OnColumn("DiscordId");
+
             Create.Table("Premium")
                 .WithColumn("Id").AsGuid().NotNullable()
                 .WithColumn("PersonId").AsGuid().NotNullable()
                 .WithColumn("StartedAt").AsDateTime().NotNullable()
-                .WithColumn("ClosedAt").AsDateTime().NotNullable();
+                .WithColumn("ClosedAt").AsDateTime().NotNullable();           
 
             Create.Index()
                 .OnTable("Premium")

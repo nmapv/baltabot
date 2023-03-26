@@ -1,5 +1,7 @@
 ﻿using BaltaBot.Domain.Handlers;
 using BaltaBot.Domain.Infra.Context;
+using BaltaBot.Domain.Infra.Repositories;
+using BaltaBot.Domain.Repositories;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -54,6 +56,8 @@ namespace BaltaBot.Domain.Api
                 .AddSingleton<HttpClient>()
                 //.AddTransient<DataContext>(s => new DataContext(conn!))
                 .AddSingleton<DataContext>()
+                .AddTransient<IPersonRepository, PersonRepository>()
+                .AddTransient<IPremiumRepository, PremiumRepository>()
                 .AddTransient<PersonHandler, PersonHandler>()
                 .AddTransient<PremiumHandler, PremiumHandler>()
                 .AddFluentMigratorCore()

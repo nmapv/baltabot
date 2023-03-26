@@ -9,12 +9,14 @@ namespace BaltaBot.Domain.Commands
     {
         public CreatePremiumCommand() { }
 
-        public CreatePremiumCommand(string id)
+        public CreatePremiumCommand(string id, string discordId)
         {
             Id = id;
+            DiscordId = discordId;
         }
 
         public string Id { get; private set; }
+        public string DiscordId { get; private set; }
 
         public Guid GetGuid()
         {
@@ -27,6 +29,7 @@ namespace BaltaBot.Domain.Commands
                 new Contract<Premium>()
                     .Requires()
                     .IsFalse(Guid.TryParse(Id, out _), "Id", "Id inválido")
+                    .IsNotNull(DiscordId, "DiscordId", "Discord id inválido")
             );
         }
     }
