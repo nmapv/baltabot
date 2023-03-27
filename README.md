@@ -4,7 +4,7 @@
 3. !cleaning -> faz uma limpeza dos premiums vencidos no canal.
 
 # requisitos
-1. variável de ambiente TOKEN_DISCORD
+1. variável de ambiente TOKEN_DISCORD com o token do [bot](https://discord.com/developers/applications).
 2. todos os Privileged Gateway Intents ativos.
 3. permissão administrador para o bot (img 1).
 
