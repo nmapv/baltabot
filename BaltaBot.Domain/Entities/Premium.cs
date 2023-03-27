@@ -1,42 +1,36 @@
 ﻿using Dapper.Contrib.Extensions;
-using Flunt.Validations;
 
 namespace BaltaBot.Domain.Entities
 {
     [Table("Premium")]
     public class Premium : Entity
     {
-        public Premium(string id, DateTime startedAt, DateTime closedAt)
+        public Premium(string id, DateTime startedAt, DateTime closedAt, Person person)
         {
-            AddNotifications(
-                new Contract<Premium>()
-                    .Requires()                    
-                    .IsNotNull(id, "Id", "Id inválido")
-                    .IsNotNull(startedAt, "StartedAt", "Data de inínio inválido")
-                    .IsNotNull(closedAt, "ClosedAt", "Data de término inválido")
-                    .IsTrue(Expired(closedAt), "ClosedAt", "Data de término já expirada")
-            );
-
             Id = Guid.Parse(id);
-            StardetAt = startedAt;
+            StartedAt = startedAt;
             ClosedAt = closedAt;
+            Person = person;
+            PersonId = person.Id;
+        }
+
+        public Premium(string Id, string PersonId, string StartedAt, string ClosedAt)
+        {
+            this.Id = Guid.Parse(Id);
+            this.PersonId = Guid.Parse(PersonId);
+            this.StartedAt = DateTime.Parse(StartedAt);
+            this.ClosedAt = DateTime.Parse(ClosedAt);
         }
 
         [Write(false)]
-        public Person? Person { get; private set; }
-        public DateTime StardetAt { get; private set; }
+        public Person Person { get; private set; }
+        public DateTime StartedAt { get; private set; }
         public DateTime ClosedAt { get; private set; }
-        public Guid? PersonId { get; private set; }
+        public Guid PersonId { get; private set; }
 
         public bool Expired(DateTime? closedAt = null)
         {
             return DateTime.Compare(DateTime.Now, closedAt ?? ClosedAt) >= 0;
-        }
-        
-        public void SetPerson(Person person)
-        {
-            Person = person;
-            PersonId = person.Id;
         }
     }
 }

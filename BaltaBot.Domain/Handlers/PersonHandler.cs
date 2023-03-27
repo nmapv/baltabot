@@ -26,16 +26,11 @@ namespace BaltaBot.Domain.Handlers
             var person = await _personRepository.GetByDiscordId(command.DiscordId);
 
             if (person != null)
-                return new GenericCommandResult(true, $"Pessoa {person.Id} já cadastrada", person);
+                return new GenericCommandResult(true, $"{person.Name} já verificado(a)", person);
 
             person = new(command.DiscordId, command.Name, command.CreatedAt);
-            AddNotifications(person.Notifications);
-
-            if (!IsValid)
-                return new GenericCommandResult(false, "Falha ao criar pessoa", Notifications);
-
             await _personRepository.Create(person);
-            return new GenericCommandResult(true, $"Pessoa {person.Id} cadastrada", person);
+            return new GenericCommandResult(true, $"{person.Name} verificado(a)", person);
         }
 
         public async Task<ICommandResult> Handle(UpdatePersonCommand command)
@@ -47,11 +42,11 @@ namespace BaltaBot.Domain.Handlers
             var person = await _personRepository.GetByDiscordId(command.DiscordId);
 
             if (person == null)
-                return new GenericCommandResult(false, $"Pessoa não cadastrada", null);
+                return new GenericCommandResult(false, $"Não verificado(a)", null);
 
             person.SetName(command.Name);
             await _personRepository.Update(person);
-            return new GenericCommandResult(true, $"Pessoa {person.Id} atualizada", person);
+            return new GenericCommandResult(true, $"{person.Name} verificado(a)", person);
         }
     }
 }

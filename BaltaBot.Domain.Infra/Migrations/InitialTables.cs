@@ -23,14 +23,10 @@ namespace BaltaBot.Domain.Infra.Migrations
                 .OnColumn("DiscordId");
 
             Create.Table("Premium")
-                .WithColumn("Id").AsGuid().NotNullable()
-                .WithColumn("PersonId").AsGuid().NotNullable()
+                .WithColumn("Id").AsGuid().NotNullable().PrimaryKey()
+                .WithColumn("PersonId").AsString().NotNullable()
                 .WithColumn("StartedAt").AsDateTime().NotNullable()
-                .WithColumn("ClosedAt").AsDateTime().NotNullable();           
-
-            Create.Index()
-                .OnTable("Premium")
-                .OnColumn("Id");
+                .WithColumn("ClosedAt").AsDateTime().NotNullable();
 
             Create.Index()
                 .OnTable("Premium")

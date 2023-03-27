@@ -15,16 +15,15 @@ namespace BaltaBot.Domain.Infra.Repositories
 
         public async Task<Premium?> Create(Guid id, Person person)
         {
-            var response = await _httpClient.GetStringAsync("https://raw.githubusercontent.com/nmapv/doc/main/baltabot");
-            var premium = JsonConvert.DeserializeObject<Premium>(response);
+            var body = await _httpClient.GetStringAsync("https://raw.githubusercontent.com/nmapv/doc/main/baltabot");
+            var response  = JsonConvert.DeserializeAnonymousType(body, new { id = string.Empty, startedAt = DateTime.Now, closedAt = DateTime.Now });
 
-            if (premium == null )
+            if (response == null)
             {
                 return null;
             }
 
-            premium.SetPerson(person);
-            return premium;
+            return new(response.id, response.startedAt, response.closedAt, person);
         }
     }
 }

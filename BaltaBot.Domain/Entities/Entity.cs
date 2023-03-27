@@ -1,14 +1,15 @@
-﻿using Flunt.Notifications;
+﻿using Dapper.Contrib.Extensions;
 
 namespace BaltaBot.Domain.Entities
 {
-    public abstract class Entity : Notifiable<Notification>
+    public abstract class Entity
     {
         public Entity()
         {
-            Id = Guid.NewGuid(); 
+            Id = Guid.NewGuid();
         }
 
+        [ExplicitKey]
         public Guid Id { get; set; }
     }
 }

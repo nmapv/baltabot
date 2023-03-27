@@ -28,24 +28,19 @@ namespace BaltaBot.Domain.Handlers
 
             var person = await _personRepository.GetByDiscordId(command.DiscordId);
             if (person == null)
-                return new GenericCommandResult(false, "Pessoa não verificada", null);
+                return new GenericCommandResult(false, "Pessoa não cadastrada", null);
 
             var premium = await _premiumRepository.Get(command.GetGuid());
-            if (premium != null && premium.IsValid)
+            if (premium != null)
                 return new GenericCommandResult(true, $"Premium {premium.Id} já cadastrado", premium);
 
             premium = await _premiumApiRepository.Create(command.GetGuid(), person);
 
             if (premium == null)
-                return new GenericCommandResult(false, "Premium id informado não existe", null);
-
-            AddNotifications(premium.Notifications);
-
-            if (!IsValid)
-                return new GenericCommandResult(false, "Falha ao cadastrar premium", Notifications);
+                return new GenericCommandResult(false, "Premium informado não existe", null);
 
             await _premiumRepository.Create(premium);
-            return new GenericCommandResult(true, $"Premium {premium.Id} cadastrada", premium);
+            return new GenericCommandResult(true, $"Premium {premium.Id} cadastrado", premium);
         }
     }
 }

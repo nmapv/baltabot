@@ -28,7 +28,8 @@ namespace BaltaBot.Domain.Api
 
                 client.Log += LogAsync;
                 services.GetRequiredService<CommandService>().Log += LogAsync;
-                await client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("TOKEN_DISCORD"));
+                //await client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("TOKEN_DISCORD"));
+                await client.LoginAsync(TokenType.Bot, "MTA0ODIwOTg4MDg1NjY3MDIyMA.GqXfjg.mJ7x_hYRuv5974eK0H5TWY3zfU1ZaRpRQszxE8");
                 await client.StartAsync();
 
                 await services.GetRequiredService<ConfigDiscord>().InitializeAsync();
@@ -52,7 +53,7 @@ namespace BaltaBot.Domain.Api
                 .AddSingleton<CommandService>()
                 .AddSingleton<ConfigDiscord>()
                 .AddSingleton<HttpClient>()
-                //.AddTransient<DataContext>(s => new DataContext(conn!))
+                //.AddTransient<DataContext>(s => new DataContext("Data Source=NMAPV\\SQLEXPRESS;Initial Catalog=xpto;Integrated Security=True;TrustServerCertificate=true"))
                 .AddSingleton<DataContext>()
                 .AddTransient<IPremiumApiRepository, PremiumApiRepository>()
                 .AddTransient<IPersonRepository, PersonRepository>()

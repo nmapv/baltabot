@@ -1,6 +1,4 @@
-﻿using BaltaBot.Domain.Commands;
-using Dapper.Contrib.Extensions;
-using Flunt.Validations;
+﻿using Dapper.Contrib.Extensions;
 
 namespace BaltaBot.Domain.Entities
 {
@@ -9,17 +7,17 @@ namespace BaltaBot.Domain.Entities
     {
         public Person(string discordId, string name, DateTime createdAt)
         {
-            AddNotifications(
-               new Contract<CreatePersonCommand>()
-                   .Requires()
-                   .IsNotNullOrEmpty(discordId, "DiscordId", "Discord Id é inválido")
-                   .IsNotNullOrEmpty(name, "Name", "Nome é inválido")
-                   .IsNotNull(createdAt, "CreatedAt", "Data de criação é inválido")
-            );
-
             DiscordId = discordId;
             Name = name;
             CreatedAt = createdAt;
+        }
+
+        public Person(string Id, string DiscordId, string Name, string CreatedAt)
+        {
+            this.Id = Guid.Parse(Id);
+            this.DiscordId = DiscordId;
+            this.Name = Name;
+            this.CreatedAt = DateTime.Parse(CreatedAt);
         }
 
         public string DiscordId { get; private set; }

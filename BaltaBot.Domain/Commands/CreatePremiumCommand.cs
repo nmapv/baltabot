@@ -28,7 +28,7 @@ namespace BaltaBot.Domain.Commands
             AddNotifications(
                 new Contract<Premium>()
                     .Requires()
-                    .IsFalse(Guid.TryParse(Id, out _), "Id", "Id inválido")
+                    .IsTrue(Guid.TryParse(Id, out _), "Id", "Id inválido")
                     .IsNotNull(DiscordId, "DiscordId", "Discord id inválido")
             );
         }
