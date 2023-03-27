@@ -33,5 +33,34 @@ namespace BaltaBot.Domain.Api.Controllers
 
             await ReplyAsync(result.Message);
         }
+
+        [Command("cleaning")]
+        public async Task Cleaning()
+        {
+            if (Context.Message.Channel.Name != "quero-ser-premium")
+                return;
+
+            await Context.Channel.DeleteMessageAsync(Context.Message.Id);
+            var command = new CleaningPremiumCommand();
+
+            var result = (GenericCommandResult)await _handler.Handle(command);
+
+            if (result.Success)
+            {
+                var role = Context.Guild.Roles.FirstOrDefault(x => x.Name == "Premium");
+                var ids = (List<string>)result.Data;
+                for (int i = 0; i < ids.Count(); i++)
+                {
+                    var id = ids[i];
+                    if (string.IsNullOrEmpty(id))
+                        continue;
+
+                    var user = await Context.Channel.GetUserAsync(ulong.Parse(id));
+                    await (user as IGuildUser).RemoveRoleAsync(role);
+                }
+            }
+
+            await ReplyAsync(result.Message);
+        }
     }
 }

@@ -28,9 +28,9 @@ namespace BaltaBot.Domain.Entities
         public DateTime ClosedAt { get; private set; }
         public Guid PersonId { get; private set; }
 
-        public bool Expired(DateTime? closedAt = null)
+        public bool Expired()
         {
-            return DateTime.Compare(DateTime.Now, closedAt ?? ClosedAt) >= 0;
+            return DateTime.Compare(DateTime.Now, ClosedAt) >= 0;
         }
     }
 }

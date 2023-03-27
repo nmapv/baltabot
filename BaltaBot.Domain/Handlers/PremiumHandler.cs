@@ -7,7 +7,8 @@ using Flunt.Notifications;
 namespace BaltaBot.Domain.Handlers
 {
     public class PremiumHandler : Notifiable<Notification>,
-        IHandler<CreatePremiumCommand>
+        IHandler<CreatePremiumCommand>,
+        IHandler<CleaningPremiumCommand>
     {
         private readonly IPremiumRepository _premiumRepository;
         private readonly IPremiumApiRepository _premiumApiRepository;
@@ -41,6 +42,17 @@ namespace BaltaBot.Domain.Handlers
 
             await _premiumRepository.Create(premium);
             return new GenericCommandResult(true, $"Premium {premium.Id} cadastrado", premium);
+        }
+
+        public async Task<ICommandResult> Handle(CleaningPremiumCommand command)
+        {
+            var premiums = await _premiumRepository.GetInactives();
+
+            if (premiums == null || premiums.Count() == 0)
+                return new GenericCommandResult(false, "Nenhum inativo encontrado", null);
+
+            var result = premiums.Select(x => x.Person.DiscordId).ToList();
+            return new GenericCommandResult(true, $"{result.Count()} inativados", result);
         }
     }
 }

@@ -23,7 +23,12 @@ namespace BaltaBot.Domain.Infra.Repositories
                 return null;
             }
 
-            return new(response.id, response.startedAt, response.closedAt, person);
+            var premium = new Premium(response.id, response.startedAt, response.closedAt, person);
+
+            if (premium.Expired())
+                return null;
+
+            return premium;
         }
     }
 }
