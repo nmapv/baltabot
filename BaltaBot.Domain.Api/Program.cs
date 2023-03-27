@@ -53,6 +53,7 @@ namespace BaltaBot.Domain.Api
                 .AddSingleton<ConfigDiscord>()
                 .AddSingleton<HttpClient>()
                 .AddSingleton<DataContext>()
+                //.AddSingleton<DataContext>(s => new DataContext(conn!))
                 .AddTransient<IPremiumApiRepository, PremiumApiRepository>()
                 .AddTransient<IPersonRepository, PersonRepository>()
                 .AddTransient<IPremiumRepository, PremiumRepository>()
@@ -60,7 +61,9 @@ namespace BaltaBot.Domain.Api
                 .AddTransient<PremiumHandler, PremiumHandler>()
                 .AddFluentMigratorCore()
                 .ConfigureRunner(c => c
-                    .AddSQLite()
+                    //.AddSqlServer()
+                    //.WithGlobalConnectionString(conn)
+                    .AddSQLite()                    
                     .WithGlobalConnectionString("DataSource=file::memory:?cache=shared")
                     .ScanIn(AppDomain.CurrentDomain.GetAssemblies().Where(x => x.FullName.Contains("BaltaBot.Domain.Infra")).ToArray()).For.Migrations())
                 .AddLogging(c => c.AddFluentMigratorConsole())
