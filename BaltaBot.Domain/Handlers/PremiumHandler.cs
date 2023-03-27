@@ -53,7 +53,7 @@ namespace BaltaBot.Domain.Handlers
                 return new GenericCommandResult(false, "Nenhum inativo encontrado", null);
 
             var result = premiums.Select(x => x.Person.DiscordId).ToList();
-            return new GenericCommandResult(true, $"{result.Count()} inativados", result);
+            return new GenericCommandResult(true, $"{result.Count()} inativo(s)", result);
         }
 
         public async Task<ICommandResult> Handle(DeletePremiumCommand command)

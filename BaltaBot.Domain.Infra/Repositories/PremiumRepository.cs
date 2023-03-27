@@ -15,7 +15,7 @@ namespace BaltaBot.Domain.Infra.Repositories
         {
             var today = DateTime.Now;
             var premiumDictionary = new Dictionary<Guid, Premium>();
-            var result = await DataContext.connection.QueryAsync<Premium, Person, Premium>(@"select * from Premium pr, Person pe where pr.PersonId = pe.Id and pr.ClosedAt>=@today",
+            var result = await DataContext.connection.QueryAsync<Premium, Person, Premium>(@"select * from Premium pr, Person pe where pr.PersonId = pe.Id and pr.ClosedAt<=@today",
                 (premium, person) =>
                 {
                     Premium premiumEntry;
