@@ -1,7 +1,11 @@
 # comandos
-1. !verify -> cadastra o usuário na base (necessário, pois o discord net só permite consulta de 100 usuários do canal)
-2. !premium -> consulta o premium numa api* e após validado é cadastrado na base. (*deixei uma api fake no premiumApiRepository)
-3. !cleaning -> faz uma limpeza dos premiums vencidos no canal.
+```
+- !verify -> cadastra o usuário na base*.
+- !premium {uuid} -> consulta o premium numa api** e após validado é cadastrado na base. 
+- !cleaning -> faz uma limpeza dos premiums vencidos no canal.
+```
+*necessário o cadastro, pois o discord.net buscar 100 usuários.
+**para a validação, foi usada uma api fake.
 
 # requisitos
 1. variável de ambiente TOKEN_DISCORD com o token do [bot](https://discord.com/developers/applications).
