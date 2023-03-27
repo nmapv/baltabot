@@ -8,7 +8,8 @@ namespace BaltaBot.Domain.Handlers
 {
     public class PremiumHandler : Notifiable<Notification>,
         IHandler<CreatePremiumCommand>,
-        IHandler<CleaningPremiumCommand>
+        IHandler<GetPremiumInactiveCommand>,
+        IHandler<DeletePremiumCommand>
     {
         private readonly IPremiumRepository _premiumRepository;
         private readonly IPremiumApiRepository _premiumApiRepository;
@@ -44,17 +45,25 @@ namespace BaltaBot.Domain.Handlers
             return new GenericCommandResult(true, $"Premium {premium.Id} cadastrado", premium);
         }
 
-        public async Task<ICommandResult> Handle(CleaningPremiumCommand command)
+        public async Task<ICommandResult> Handle(GetPremiumInactiveCommand command)
         {
             var premiums = await _premiumRepository.GetInactives();
 
             if (premiums == null || premiums.Count() == 0)
                 return new GenericCommandResult(false, "Nenhum inativo encontrado", null);
 
-            await _premiumRepository.DeleteInactives();
-
             var result = premiums.Select(x => x.Person.DiscordId).ToList();
             return new GenericCommandResult(true, $"{result.Count()} inativados", result);
+        }
+
+        public async Task<ICommandResult> Handle(DeletePremiumCommand command)
+        {
+            command.Validate();
+            if (!command.IsValid)
+                return new GenericCommandResult(false, "Premium inválido", command.Notifications);
+
+            await _premiumRepository.DeleteByDiscorId(command.DiscordId);
+            return new GenericCommandResult(true, "Premium deletado", null);
         }
     }
 }

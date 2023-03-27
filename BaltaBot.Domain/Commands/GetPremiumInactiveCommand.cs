@@ -3,7 +3,7 @@ using Flunt.Notifications;
 
 namespace BaltaBot.Domain.Commands
 {
-    public class CleaningPremiumCommand : Notifiable<Notification>, ICommand
+    public class GetPremiumInactiveCommand : Notifiable<Notification>, ICommand
     {
         public void Validate()
         {

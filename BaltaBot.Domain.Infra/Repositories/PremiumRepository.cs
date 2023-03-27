@@ -13,8 +13,9 @@ namespace BaltaBot.Domain.Infra.Repositories
 
         public async Task<IEnumerable<Premium>> GetInactives()
         {
+            var today = DateTime.Now;
             var premiumDictionary = new Dictionary<Guid, Premium>();
-            var result = await DataContext.connection.QueryAsync<Premium, Person, Premium>(@"select * from Premium pr, Person pe where pr.Person_id = pe.Id and pr.ClosedAt>=GETDATE()",
+            var result = await DataContext.connection.QueryAsync<Premium, Person, Premium>(@"select * from Premium pr, Person pe where pr.PersonId = pe.Id and pr.ClosedAt>=@today",
                 (premium, person) =>
                 {
                     Premium premiumEntry;
@@ -28,14 +29,15 @@ namespace BaltaBot.Domain.Infra.Repositories
                     premiumEntry.SetPerson(person);
                     return premiumEntry;
                 },
-                splitOn: "Id"
+                splitOn: "Id",
+                param: new { today }
             );
             return result;
         }
 
-        public async Task DeleteInactives()
+        public async Task DeleteByDiscorId(string discordId)
         {
-            await DataContext.connection.QueryAsync(@"delete Premium where ClosedAt>=GETDATE()");
+            await DataContext.connection.QueryAsync(@"delete pr from Premium pr join Person pe on pr.PersonId = pe.Id where pe.DiscordId=@discordId", param: new { discordId });
         }
     }
 }

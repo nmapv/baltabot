@@ -41,7 +41,7 @@ namespace BaltaBot.Domain.Api.Controllers
                 return;
 
             await Context.Channel.DeleteMessageAsync(Context.Message.Id);
-            var command = new CleaningPremiumCommand();
+            var command = new GetPremiumInactiveCommand();
 
             var result = (GenericCommandResult)await _handler.Handle(command);
 
@@ -57,6 +57,7 @@ namespace BaltaBot.Domain.Api.Controllers
 
                     var user = await Context.Channel.GetUserAsync(ulong.Parse(id));
                     await (user as IGuildUser).RemoveRoleAsync(role);
+                    await _handler.Handle(new DeletePremiumCommand(id));
                 }
             }
 
