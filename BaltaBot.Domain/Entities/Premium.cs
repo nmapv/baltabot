@@ -32,5 +32,10 @@ namespace BaltaBot.Domain.Entities
         {
             return DateTime.Compare(DateTime.Now, ClosedAt) >= 0;
         }
+
+        public void SetPerson(Person person)
+        {
+            this.Person = person;
+        }
     }
 }
