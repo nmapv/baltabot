@@ -4,7 +4,7 @@
 - !premium {uuid} -> consulta o premium numa api** e após validado é cadastrado na base. 
 - !cleaning -> faz uma limpeza dos premiums vencidos no canal.
 ```
-*necessário o cadastro, pois o discord.net buscar 100 usuários.
+*necessário o cadastro, pois o discord.net buscar apenas 100 usuários pode vez.
 **para a validação, foi usada uma api fake.
 
 # requisitos
