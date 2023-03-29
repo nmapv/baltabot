@@ -1,5 +1,7 @@
-﻿using BaltaBot.Domain.Handlers;
+﻿using BaltaBot.Domain.ExternalServices;
+using BaltaBot.Domain.Handlers;
 using BaltaBot.Domain.Infra.Context;
+using BaltaBot.Domain.Infra.ExternalServices;
 using BaltaBot.Domain.Infra.Repositories;
 using BaltaBot.Domain.Repositories;
 using Discord;
@@ -54,7 +56,7 @@ namespace BaltaBot.Domain.Api
                 .AddSingleton<HttpClient>()
                 .AddSingleton<DataContext>()
                 //.AddSingleton<DataContext>(s => new DataContext(conn!))
-                .AddTransient<IPremiumApiRepository, PremiumApiRepository>()
+                .AddTransient<IPremiumService, PremiumService>()
                 .AddTransient<IPersonRepository, PersonRepository>()
                 .AddTransient<IPremiumRepository, PremiumRepository>()
                 .AddTransient<PersonHandler, PersonHandler>()

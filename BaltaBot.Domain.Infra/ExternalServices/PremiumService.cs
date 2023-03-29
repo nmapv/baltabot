@@ -1,22 +1,22 @@
 ﻿using BaltaBot.Domain.Entities;
-using BaltaBot.Domain.Repositories;
+using BaltaBot.Domain.ExternalServices;
 using Newtonsoft.Json;
 
-namespace BaltaBot.Domain.Infra.Repositories
+namespace BaltaBot.Domain.Infra.ExternalServices
 {
-    public class PremiumApiRepository : IPremiumApiRepository
+    public class PremiumService : IPremiumService
     {
         private readonly HttpClient _httpClient;
 
-        public PremiumApiRepository(HttpClient httpClient)
+        public PremiumService(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
 
-        public async Task<Premium?> Create(Guid id, Person person)
+        public async Task<Premium?> Get(Guid id, Person person)
         {
             var body = await _httpClient.GetStringAsync("https://raw.githubusercontent.com/nmapv/doc/main/baltabot");
-            var response  = JsonConvert.DeserializeAnonymousType(body, new { id = string.Empty, startedAt = DateTime.Now, closedAt = DateTime.Now });
+            var response = JsonConvert.DeserializeAnonymousType(body, new { id = string.Empty, startedAt = DateTime.Now, closedAt = DateTime.Now });
 
             if (response == null)
             {

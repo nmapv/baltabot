@@ -1,5 +1,6 @@
 ﻿using BaltaBot.Domain.Commands;
 using BaltaBot.Domain.Commands.Interfaces;
+using BaltaBot.Domain.ExternalServices;
 using BaltaBot.Domain.Handlers.Interfaces;
 using BaltaBot.Domain.Repositories;
 using Flunt.Notifications;
@@ -12,14 +13,14 @@ namespace BaltaBot.Domain.Handlers
         IHandler<DeletePremiumCommand>
     {
         private readonly IPremiumRepository _premiumRepository;
-        private readonly IPremiumApiRepository _premiumApiRepository;
         private readonly IPersonRepository _personRepository;
+        private readonly IPremiumService _premiumService;
 
-        public PremiumHandler(IPremiumRepository premiumRepository, IPremiumApiRepository premiumApiRepository, IPersonRepository personRepository)
+        public PremiumHandler(IPremiumRepository premiumRepository, IPersonRepository personRepository, IPremiumService premiumService)
         {
             _premiumRepository = premiumRepository;
-            _premiumApiRepository = premiumApiRepository;
             _personRepository = personRepository;
+            _premiumService = premiumService;
         }
 
         public async Task<ICommandResult> Handle(CreatePremiumCommand command)
@@ -36,7 +37,7 @@ namespace BaltaBot.Domain.Handlers
             if (premium != null)
                 return new GenericCommandResult(true, $"Premium {premium.Id} já cadastrado", premium);
 
-            premium = await _premiumApiRepository.Create(command.GetGuid(), person);
+            premium = await _premiumService.Get(command.GetGuid(), person);
 
             if (premium == null)
                 return new GenericCommandResult(false, "Premium informado não existe", null);
